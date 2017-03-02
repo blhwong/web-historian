@@ -42,11 +42,15 @@ exports.readListOfUrls = function(callback) {
 
 };
 
+// is URL listed in the body of /archives/sites.txt?
 exports.isUrlInList = function(url, callback) {
   exports.readListOfUrls(function(urls) {
-    callback(urls.indexOf(url) >= 0);
+    var test = urls.indexOf(url) >= 0;
+    callback(test);
+    return test;
   });
 };
+
 
 exports.addUrlToList = function(url, callback) {
   fs.appendFile(exports.paths.list, url, function(err) {
@@ -58,10 +62,15 @@ exports.addUrlToList = function(url, callback) {
   });
 };
 
+// is URL listed as a file in /archives/sites?
 exports.isUrlArchived = function(url, callback) {
+  console.log('in url archived');
+  var test;
   fs.access(exports.paths.archivedSites + '/' + url, function(err) {
     callback(!err);
+    test = !err;
   });
+  return test;
 };
 
 exports.downloadUrls = function(urls) {
