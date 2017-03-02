@@ -50,13 +50,13 @@ exports.isUrlInList = function(url, callback) {
   });
 };
 
-
+// add URL to /archives/sites.txt
 exports.addUrlToList = function(url, callback) {
+  console.log('url to be appended', url);
   fs.appendFile(exports.paths.list, url, function(err) {
     if (err) {
       throw err;
     }
-    // console.log('Added URL!');
     callback();
   });
 };
@@ -69,7 +69,9 @@ exports.isUrlArchived = function(url, callback) {
   });
 };
 
+
 exports.downloadUrls = function(urls) {
+  console.log('downloading...');
   for (var i = 0; i < urls.length; i++) {
     fs.open(exports.paths.archivedSites + '/' + urls[i], 'w', function(err, fd) {
       // console.log('fd', fd);
