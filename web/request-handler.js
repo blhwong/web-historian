@@ -23,8 +23,8 @@ exports.handleRequest = function (req, res) {
   } else { // if (archive.isUrlArchived(req.url)) {
     console.log('ENTERED ARCHIVES!');
     console.log('expect this to be true or false:', archive.isUrlArchived(req.url, function() {}));
-
-    asset = archive.paths.siteAssets + '/' + req.url;
+    asset = archive.paths.archivedSites + req.url;
+    console.log(asset);
 
     // helpHandleReq(statusCode, req, res, asset, data);
 
