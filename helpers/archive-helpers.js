@@ -53,12 +53,15 @@ exports.addUrlToList = function(url, callback) {
     if (err) {
       throw err;
     }
-    console.log('Added URL!');
+    // console.log('Added URL!');
     callback();
   });
 };
 
 exports.isUrlArchived = function(url, callback) {
+  fs.access(exports.paths.archivedSites + '/' + url, function(err) {
+    callback(!err);
+  });
 };
 
 exports.downloadUrls = function(urls) {
