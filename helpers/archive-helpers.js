@@ -47,7 +47,6 @@ exports.isUrlInList = function(url, callback) {
   exports.readListOfUrls(function(urls) {
     var test = urls.indexOf(url) >= 0;
     callback(test);
-    return test;
   });
 };
 
@@ -64,13 +63,10 @@ exports.addUrlToList = function(url, callback) {
 
 // is URL listed as a file in /archives/sites?
 exports.isUrlArchived = function(url, callback) {
-  console.log('in url archived');
-  var test;
+  console.log('we are in helper url archived');
   fs.access(exports.paths.archivedSites + '/' + url, function(err) {
     callback(!err);
-    test = !err;
   });
-  return test;
 };
 
 exports.downloadUrls = function(urls) {
