@@ -9,9 +9,9 @@ exports.handleRequest = function (req, res) {
 
   var asset;
   var statusCode = 200;
-  
+
   // GET REQUEST
-  if (req.method === 'GET') { 
+  if (req.method === 'GET') {
     // if we are at landing page, call index
     if (req.url === '/') {
       asset = archive.paths.siteAssets + '/index.html';
@@ -20,10 +20,11 @@ exports.handleRequest = function (req, res) {
 
       httpHelper.serveAssets(res, asset, function(data) {
         res.writeHead(statusCode, httpHelper.headers);
+        // res.writeHeader(statusCode, );
         res.end(data);
       });
-    
-    } else { 
+
+    } else {
 
       // if URL is archived, load page from archive
       archive.isUrlArchived(req.url, function(exists) {
@@ -48,7 +49,7 @@ exports.handleRequest = function (req, res) {
               res.writeHead(statusCode, httpHelper.headers);
               res.end();
             }
-          }); 
+          });
         }
       });
     }
@@ -91,17 +92,17 @@ exports.handleRequest = function (req, res) {
               console.log('adding URL to list.. hopefully');
               archive.addUrlToList(url, function(exists) {
                 asset = archive.paths.siteAssets + '/loading.html';
-                htpHelper.serveAssets(res, asset, function(data) {
+                httpHelper.serveAssets(res, asset, function(data) {
                   res.writeHead(statusCode, httpHelper.headers);
                   res.end(data);
                 });
               });
             }
-          }); 
+          });
         }
       });
 
- 
+
 
     });
   }

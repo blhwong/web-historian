@@ -2,6 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
 var http = require('http');
+var request = require('request');
 
 /*
  * You will need to reuse the same paths many times over in the course of this sprint.
@@ -29,9 +30,9 @@ exports.initialize = function(pathsObj) {
 exports.readListOfUrls = function(callback) {
 
   fs.readFile(exports.paths.list, (err, data) => {
-    
+
     if (err) {
-      throw err; 
+      throw err;
     }
 
     var string = JSON.stringify(data.toString());
@@ -72,41 +73,47 @@ exports.isUrlArchived = function(url, callback) {
 
 
 exports.downloadUrls = function(urls) {
-  var savedData = '';
-  console.log('downloading...');
-  for (var i = 0; i < urls.length - 1; i++) {
-      // console.log('fd', fd);
-      // to do: might need to refactor
-    console.log('early i', i);
-    console.log(urls[i]);
-    options = {
-      host: urls[i],
-      port: 80,
-      path: '/index.html'
-    };
-    // request HTML from website with http.get
-    http.get(options, function(res) {
-      // clear the sites page
+  _.each(urls, function(url) {
+    if (!url) {
+      return;
+    }
+    request('http://' + url).pipe(fs.createWriteStream(exports.paths.archivedSites + '/' + url));
+  });
+  // var savedData = '';
+  // console.log('downloading...');
+  // for (var i = 0; i < urls.length - 1; i++) {
+  //     // console.log('fd', fd);
+  //     // to do: might need to refactor
+  //   console.log('early i', i);
+  //   console.log(urls[i]);
+  //   options = {
+  //     host: urls[i],
+  //     port: 80,
+  //     path: '/index.html'
+  //   };
+  //   // request HTML from website with http.get
+  //   http.get(options, function(res) {
+  //     // clear the sites page
 
-      res.on('data', function(data) {
-        // console.log(savedData);
-        savedData += data.toString();
-        fs.writeFile(exports.paths.archivedSites + '/' + options.host, savedData, (err) => {
-          if (err) { throw err; }
-        });
+  //     res.on('data', function(data) {
+  //       // console.log(savedData);
+  //       savedData += data.toString();
+  //       fs.writeFile(exports.paths.archivedSites + '/' + options.host, savedData, (err) => {
+  //         if (err) { throw err; }
+  //       });
 
-      });
+  //     });
 
 
-    }).on('error', function(e) {
-      // console.log(urls[i]);
-      console.log('Got error:' + e.message);
-    });
+  //   }).on('error', function(e) {
+  //     // console.log(urls[i]);
+  //     console.log('Got error:' + e.message);
+  //   });
     // console.log('i hope you exist!', urls[i]);
     // console.log('savedData', savedData);
 
 
     // fs.open(exports.paths.archivedSites + '/' + urls[i], 'w', function(err, fd) {
     // });
-  }
+  // }
 };
