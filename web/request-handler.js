@@ -68,7 +68,8 @@ exports.handleRequest = function (req, res) {
         console.log('entered is URL archived');
         if (exists) {
           console.log('yup, URL exists');
-          asset = archive.paths.archivedSites + req.url;
+          asset = archive.paths.archivedSites + '/' + url;
+          console.log(asset);
           httpHelper.serveAssets(res, asset, function(data) {
             res.writeHead(statusCode, httpHelper.headers);
             res.end(data);
@@ -90,7 +91,7 @@ exports.handleRequest = function (req, res) {
               console.log('adding URL to list.. hopefully');
               archive.addUrlToList(url, function(exists) {
                 asset = archive.paths.siteAssets + '/loading.html';
-                httpHelper.serveAssets(res, asset, function(data) {
+                htpHelper.serveAssets(res, asset, function(data) {
                   res.writeHead(statusCode, httpHelper.headers);
                   res.end(data);
                 });
