@@ -19,7 +19,7 @@ var checkUrls = function(res, statusCode, url, type) {
     });
   } else {
     // if URL is in URL list, load loading.html
-    archive.isUrlInList(url, function(exists) {
+    archive.isUrlInList(url.slice(1), function(exists) {
       if (exists) {
         asset = archive.paths.siteAssets + '/loading.html';
         httpHelper.serveAssets(res, asset, function(data) {
@@ -31,7 +31,7 @@ var checkUrls = function(res, statusCode, url, type) {
           statusCode = 404;
           sendResponse(res, statusCode);
         } else {
-          url = url + '\n';
+          url = url.slice(1) + '\n';
           archive.addUrlToList(url, function(exists) {
             asset = archive.paths.siteAssets + '/loading.html';
             httpHelper.serveAssets(res, asset, function(data) {
@@ -62,11 +62,16 @@ exports.handleRequest = function (req, res) {
     }
   // POST REQUEST
   } else {
-    req.on('data', function(url) {
-      var url = url.toString();
-      url = '/' + url.slice(4);
-      statusCode = 302;
-      checkUrls(res, statusCode, url, 'post');
+    var url = []
+    req.on('data', function(chunk) {
+      url.push(chunk);
+    }).on('end', function() {
+      url = Buffer.concat(url).toString();
+      var urlTokens = url.split('=');
+      if (urlTokens[0] === 'url') {
+        statusCode = 302;
+        checkUrls(res, statusCode, '/' + urlTokens[1], 'post');
+      }
     });
   }
 };
