@@ -28,13 +28,10 @@ exports.initialize = function(pathsObj) {
 // modularize your code. Keep it clean!
 
 exports.readListOfUrls = function(callback) {
-
   fs.readFile(exports.paths.list, (err, data) => {
-
     if (err) {
       throw err;
     }
-
     var string = JSON.stringify(data.toString());
     string = string.slice(1, string.length - 1);
     var array = string.split('\\n');
@@ -54,7 +51,6 @@ exports.isUrlInList = function(url, callback) {
 
 // add URL to /archives/sites.txt
 exports.addUrlToList = function(url, callback) {
-  console.log('url to be appended', url);
   fs.appendFile(exports.paths.list, url, function(err) {
     if (err) {
       throw err;
@@ -65,7 +61,6 @@ exports.addUrlToList = function(url, callback) {
 
 // is URL listed as a file in /archives/sites?
 exports.isUrlArchived = function(url, callback) {
-  console.log('we are in helper url archived');
   fs.access(exports.paths.archivedSites + '/' + url, function(err) {
     callback(!err);
   });
@@ -79,41 +74,4 @@ exports.downloadUrls = function(urls) {
     }
     request('http://' + url).pipe(fs.createWriteStream(exports.paths.archivedSites + '/' + url));
   });
-  // var savedData = '';
-  // console.log('downloading...');
-  // for (var i = 0; i < urls.length - 1; i++) {
-  //     // console.log('fd', fd);
-  //     // to do: might need to refactor
-  //   console.log('early i', i);
-  //   console.log(urls[i]);
-  //   options = {
-  //     host: urls[i],
-  //     port: 80,
-  //     path: '/index.html'
-  //   };
-  //   // request HTML from website with http.get
-  //   http.get(options, function(res) {
-  //     // clear the sites page
-
-  //     res.on('data', function(data) {
-  //       // console.log(savedData);
-  //       savedData += data.toString();
-  //       fs.writeFile(exports.paths.archivedSites + '/' + options.host, savedData, (err) => {
-  //         if (err) { throw err; }
-  //       });
-
-  //     });
-
-
-  //   }).on('error', function(e) {
-  //     // console.log(urls[i]);
-  //     console.log('Got error:' + e.message);
-  //   });
-    // console.log('i hope you exist!', urls[i]);
-    // console.log('savedData', savedData);
-
-
-    // fs.open(exports.paths.archivedSites + '/' + urls[i], 'w', function(err, fd) {
-    // });
-  // }
 };
